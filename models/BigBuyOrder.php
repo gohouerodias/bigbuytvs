@@ -44,7 +44,7 @@ class BigBuyOrder extends ObjectModel
         $sql = 'SELECT aco.id_order, aco.id_order_detail, o.id_shop,aco.sku
                FROM ' . _DB_PREFIX_ . 'bigbuy_orders  aco
                INNER JOIN ' . _DB_PREFIX_ . 'orders  o on o.id_order = aco.id_order
-              
+               and o.valid = 1 and o.current_state in (2,3,' . Configuration::get('BIGBUY_STATUS_CREATE', 3) . ')
                WHERE aco.date_send = \'0000-00-00 00:00:00\'
                ORDER BY aco.id_order, aco.id_order_detail
            ';
