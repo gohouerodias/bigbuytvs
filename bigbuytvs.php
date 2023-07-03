@@ -39,12 +39,12 @@ class BigBuyTvs extends Module
     const CLASS_LOG_CRON = "BigBuy Cron";
     
     //production config
-    const API_KEY_PROD = "MGJlNzcwZWI4Njk2NDVjMTZjOTk3ODhlN2EzNGE1NDkyZmMzMjA1ZjZhYzJhZDQwZjZmMmFjNTczOWFiNTM3Mg";
-    const  API_BASE_URL = "https://api.bigbuy.eu";
+    //const API_KEY_PROD = "MGJlNzcwZWI4Njk2NDVjMTZjOTk3ODhlN2EzNGE1NDkyZmMzMjA1ZjZhYzJhZDQwZjZmMmFjNTczOWFiNTM3Mg";
+    //const  API_BASE_URL = "https://api.bigbuy.eu";
 
     //sandbox config
-    //const API_KEY_PROD = "MThlMzlkOTBlNGRmNmY1MmRiODgxMjlmMmQ1MWQ0OWVhMzBhYTRlYzkzZGM5Mzg1ZjkzMzBmN2FlOGE4ZWU2MQ";
-    //const  API_BASE_URL = "https://api.sandbox.bigbuy.eu";
+    const API_KEY_PROD = "MThlMzlkOTBlNGRmNmY1MmRiODgxMjlmMmQ1MWQ0OWVhMzBhYTRlYzkzZGM5Mzg1ZjkzMzBmN2FlOGE4ZWU2MQ";
+    const  API_BASE_URL = "https://api.sandbox.bigbuy.eu";
 
     protected $config_form = false;
 
@@ -312,8 +312,6 @@ class BigBuyTvs extends Module
         $bigBuyOrder = new BigBuyOrder();
         $orders_to_send = $bigBuyOrder->getOrdersToSend();
         
-        $orders_to_send;
-
         if($bigBuyOrder->sendAllOrders($orders_to_send)){
        
             $this->_sendOrdersByEmail();

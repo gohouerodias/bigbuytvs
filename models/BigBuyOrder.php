@@ -44,7 +44,6 @@ class BigBuyOrder extends ObjectModel
         $sql = 'SELECT aco.id_order, aco.id_order_detail, o.id_shop,aco.sku
                FROM ' . _DB_PREFIX_ . 'bigbuy_orders  aco
                INNER JOIN ' . _DB_PREFIX_ . 'orders  o on o.id_order = aco.id_order
-               and o.valid = 1 and o.current_state in (2,3,' . Configuration::get('BIGBUY_STATUS_CREATE', 3) . ')
                WHERE aco.date_send = \'0000-00-00 00:00:00\'
                ORDER BY aco.id_order, aco.id_order_detail
            ';
@@ -214,15 +213,18 @@ class BigBuyOrder extends ObjectModel
 
     public static function saveSend($ref_order)
     {
-
+         var_export(
+           "oki"
+        );
         $order = new Order((int)$ref_order);
 
         $id_order_state = (int)Configuration::get('BIGBUY_STATUS_CREATE');
         if ($order->current_state != $id_order_state) {
             self::_changeStatus($order, $id_order_state);
         }
+       
 
-        return Db::getInstance()->update(
+        return  Db::getInstance()->update(
             BigBuyOrder::$definition['table'],
             array(
                 "date_send" => date('c'),

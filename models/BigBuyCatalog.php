@@ -1091,7 +1091,7 @@ class BigBuyCatalog
 
         $files = $this->getUpdatedData();
 
-        var_dump($files);
+        var_export($files);
 
         $productStocks = [];
         foreach ($files as $file) {
@@ -1169,18 +1169,18 @@ class BigBuyCatalog
    
         // Données du corps de la requête
         
-      /*  $data ='{
+        $data ='{
   "product_stock_request": {
     "products": [
       {
-        "sku": "F1515101" 
+        "sku": "V1300191" 
       },{
-        "sku":"H2500108"
+        "sku":"V1300181"
       }
 
     ] 
       } 
-      }' ;*/
+      }' ;/*
      $data ='{
             "product_stock_request": {
                 "products": [
@@ -4405,7 +4405,7 @@ class BigBuyCatalog
                 }
                 ] 
                 } 
-      }';
+      }';*/
         // En-têtes de la requête
         $headers = [
             'Authorization: Bearer '. BigBuyTvs::API_KEY_PROD,
