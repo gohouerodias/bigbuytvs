@@ -257,7 +257,7 @@ class BigBuyTvs extends Module
         //$this->_sendUpdatedProductByEmail();
         //$this->cronSendOrder();
 
-       //$this->cronUpdatePriceAndQuantity();
+       $this->cronUpdatePriceAndQuantity();
     }
 
 
@@ -301,7 +301,7 @@ class BigBuyTvs extends Module
         $bigBuyCatalog = new BigBuyCatalog();
        
         if ( $bigBuyCatalog->updatePriceAndQuantity()) {
-            $this->_sendUpdatedProductByEmail();
+            // $this->_sendUpdatedProductByEmail();
         }
         
     }

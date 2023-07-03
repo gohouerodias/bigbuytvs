@@ -25,7 +25,7 @@ class BigBuyCatalog
             $productStocks[] = new ProductStock(
                 $file['sku'],
                 $file['stocks'][0]['quantity'],
-                BigBuyTvs::getSendType($file['stocks'][0]['quantity'])
+                BigBuyTvs::getSendType($file['stocks'][0]['maxHandlingDays'])
             );
         }
 
@@ -40,7 +40,7 @@ class BigBuyCatalog
                     UPDATE  ps_product p
                     INNER JOIN ps_stock_available sa on sa.id_product = p.id_product and sa.quantity <> 0
                     SET sa.quantity = 0, p.date_upd = now()
-                    WHERE id_supplier = " . Configuration::get('DARTY_ID_SUPPLIER');
+                    WHERE id_supplier = " . Configuration::get('BIGBUY_ID_SUPPLIER');
 
         Db::getInstance()->execute($sql);
 
@@ -3353,6 +3353,10 @@ class BigBuyCatalog
                 'method' => 'POST',
                 'content' => $data,
             ],
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ]
         ];
 
         // Création du contexte de la requête
@@ -3365,7 +3369,6 @@ class BigBuyCatalog
         if ($response === false) {
             // Erreur lors de la requête
             echo "Erreur lors de l'envoi de la requête API.";
-            return $this->getUpdatedData();
         } else {
             $response_data = json_decode($response, true);
             //var_export($response_data);
