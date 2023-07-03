@@ -37,14 +37,16 @@ class BigBuyTvs extends Module
 {
     const CLASS_LOG = "BigBuy";
     const CLASS_LOG_CRON = "BigBuy Cron";
+    const SEND_TYPE_NORMAL = "Normal";
+    const SEND_TYPE_RAPIDE = "Rapide";
     
     //production config
-    const API_KEY_PROD = "MGJlNzcwZWI4Njk2NDVjMTZjOTk3ODhlN2EzNGE1NDkyZmMzMjA1ZjZhYzJhZDQwZjZmMmFjNTczOWFiNTM3Mg";
-    const  API_BASE_URL = "https://api.bigbuy.eu";
+    // const API_KEY_PROD = "MGJlNzcwZWI4Njk2NDVjMTZjOTk3ODhlN2EzNGE1NDkyZmMzMjA1ZjZhYzJhZDQwZjZmMmFjNTczOWFiNTM3Mg";
+    // const  API_BASE_URL = "https://api.bigbuy.eu";
 
     //sandbox config
-    //const API_KEY_PROD = "MThlMzlkOTBlNGRmNmY1MmRiODgxMjlmMmQ1MWQ0OWVhMzBhYTRlYzkzZGM5Mzg1ZjkzMzBmN2FlOGE4ZWU2MQ";
-    //const  API_BASE_URL = "https://api.sandbox.bigbuy.eu";
+    const API_KEY_PROD = "MThlMzlkOTBlNGRmNmY1MmRiODgxMjlmMmQ1MWQ0OWVhMzBhYTRlYzkzZGM5Mzg1ZjkzMzBmN2FlOGE4ZWU2MQ";
+    const  API_BASE_URL = "https://api.sandbox.bigbuy.eu";
 
     protected $config_form = false;
 
@@ -76,7 +78,7 @@ class BigBuyTvs extends Module
     public function install()
     { 
         include(dirname(__FILE__) . '/sql/install.php');
-        
+        $this->addConfigFeature();
         return parent::install() &&
             $this->registerHook('actionValidateOrder') &&
             $this->registerHook('actionOrderStatusUpdate');
@@ -403,4 +405,34 @@ class BigBuyTvs extends Module
         return 'BB-'.$ref;
     }
 
+    public function addfeatured() {
+        $feature = new Feature();
+        $feature->name = array((int)Configuration::get('PS_LANG_DEFAULT') => 'Type d\'envoi');
+        $feature->add();
+    
+        $feature_value_normal = new FeatureValue();
+        $feature_value_normal->id_feature = $feature->id;
+        $feature_value_normal->value = array((int)Configuration::get('PS_LANG_DEFAULT') => self::SEND_TYPE_NORMAL);
+        $feature_value_normal->add();
+    
+        $feature_value_rapide = new FeatureValue();
+        $feature_value_rapide->id_feature = $feature->id;
+        $feature_value_rapide->value = array((int)Configuration::get('PS_LANG_DEFAULT') =>self::SEND_TYPE_RAPIDE);
+        $feature_value_rapide->add();
+    
+        return $feature->id;
+    }
+    
+    public function addConfigFeature() {
+        if (!Configuration::get('ADD_FEATURE_KEY_BB', false)) {
+            $featureId = $this->addfeatured();
+            Configuration::updateValue('ADD_FEATURE_KEY_BB', $featureId);
+        }
+    
+        return true;
+    }
+
+    public static function getSendType($day){
+        return intval($day) > 1 ? BigBuyTvs::SEND_TYPE_NORMAL : BigBuyTvs::SEND_TYPE_RAPIDE;
+    }
 }
